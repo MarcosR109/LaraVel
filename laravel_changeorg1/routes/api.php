@@ -30,4 +30,5 @@ Route::controller(EventController::class)->group(function() {
 
 Route::controller(EventTypeController::class)->group(function() {
     Route::get('type/{type}', 'listEvents');
+    Route::post('type/store', 'storeType');
 });

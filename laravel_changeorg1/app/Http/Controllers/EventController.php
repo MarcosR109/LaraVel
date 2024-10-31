@@ -16,9 +16,9 @@ class EventController extends Controller
     {
         //
     }
-public function listUsers(Event $event){
-        $users = $event->users;
-        return response()->json(['message'=>null,'data'=>$users],200);
+public function listEvents(EventType $eventType){
+        $events = $eventType->events;
+        return response()->json(['message'=>null,'data'=>$events],200);
 }
     /**
      * Show the form for creating a new resource.
@@ -36,6 +36,7 @@ public function listUsers(Event $event){
         $validator = Validator::make($request->all(),[
             'event_name'=>'string|required',
             'event_detail'=>'string|required',
+            'event_type_id'=>'integer|required',
         ]);
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(),400);
