@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EventType;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Validator;
@@ -16,10 +18,13 @@ class EventController extends Controller
     {
         //
     }
-public function listEvents(EventType $eventType){
+
+    public function listEvents(EventType $eventType)
+    {
         $events = $eventType->events;
-        return response()->json(['message'=>null,'data'=>$events],200);
-}
+        return response()->json(['message' => null, 'data' => $events], 200);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -33,16 +38,22 @@ public function listEvents(EventType $eventType){
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'event_name'=>'string|required',
-            'event_detail'=>'string|required',
-            'event_type_id'=>'integer|required',
+        $validator = Validator::make($request->all(), [
+            'event_name' => 'string|required',
+            'event_detail' => 'string|required',
+            'event_type_id' => 'integer|required',
         ]);
-        if($validator->fails()){
-            return response()->json($validator->errors()->toJson(),400);
+        if ($validator->fails()) {
+            return response()->json($validator->errors()->toJson(), 400);
         }
         $event = Event::Create($validator->validate());
-        return response()->json(['message'=>'Evento creado','data'=>$event], 200);
+        return response()->json(['message' => 'Evento creado', 'data' => $event], 200);
+    }
+
+    public function listUsers(Event $event)
+    {
+        $users = $event->users;
+        return response()->json(['message' => null,'data'=> $users]);
     }
 
     /**
