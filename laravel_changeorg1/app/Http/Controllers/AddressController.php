@@ -14,19 +14,19 @@ class AddressController extends Controller
     public function store(Request $request)
     {
         $emailValidator = $this->validateEmail($request);
-        $addressessValidator = $this->validateAddress($request);
-        if ($emailValidator->fails() || $addressessValidator->fails()) {
+        $addressesValidator = $this->validateAddress($request);
+        if ($emailValidator->fails() || $addressesValidator->fails()) {
             return response()->json(['message' => 'Failed',
                 'email' => $emailValidator->messages(),
-                'address' => $addressessValidator->messages()], 400);
+                'address' => $addressesValidator->messages()], 400);
         }
-        $user = User::where('email',$request->get('email'))->firstOrFail();
-        if($user->address()){
+        $user = User::where('email',$request->get('email'))->first();
+        if($user->address){
             return response()->json(['message'=>'User has Address Already','data'=>null],400);
         }
         else{
-            $address = new Address($addressessValidator->validate());
-            $user->addresses()->save($address);
+            $address = new Address($addressesValidator->validate());
+            $user->address()->save($address);
             return response()->json(['message'=>'Address Added','data'=>$user],201);
         }
     }
